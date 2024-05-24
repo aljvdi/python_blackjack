@@ -31,12 +31,12 @@ try:
             else:
                 break
 
-        # the first one is for the dealer, then player, then player again (The reason is because the dealer should have one card face up and one card face down and if we dispense 2 cards for the dealer, the dealer will have 2 cards face up and that's not fair for the player)
+        # Dispense the cards
         player_cards.extend(dispenser.dispense(2))
-        dealer_cards.append(dispenser.dispense())
+        dealer_cards.extend(dispenser.dispense(2)) # The dealer gets two cards as well (one of them is hidden)
         
         print("Player's Hand: ", player_cards)
-        print("Dealer's Hand: ", dealer_cards)
+        print("Dealer's Hand: ", [dealer_cards[0], 'HIDDEN']) # The dealer's second card is hidden
 
         if engine.get_the_score(player_cards) == 21:
             print(Fore.GREEN + "Whoala! Player wins with a Blackjack!" + Fore.RESET)
