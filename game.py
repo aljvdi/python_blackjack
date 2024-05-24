@@ -2,6 +2,7 @@ import models.treasury, models.engine, models.cards
 from colorama import Fore
 from os import system
 from time import sleep
+from pyfiglet import Figlet
 
 treasury = models.treasury.Treasury(player_balance=100) # the player enters with £100 by default.
 dispenser = models.cards.Cards()
@@ -16,6 +17,8 @@ try:
         any_lost: bool = False # To keep track if any of them lost before checking the result
 
         system('clear') # Clear the "Table" for each new game
+        print(Fore.CYAN + Figlet(font='slant').renderText("PY BlackJack") + Fore.RESET)
+
         print(Fore.YELLOW + f"Player Balance: £{treasury.get_player_balance():.2f}" + Fore.RESET)
 
 
