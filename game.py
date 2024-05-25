@@ -44,6 +44,7 @@ try:
         if engine.get_the_score(player_cards) == 21:
             print(Fore.GREEN + "Whoala! Player wins with a Blackjack!" + Fore.RESET)
             treasury.set_player_balance(treasury.get_player_balance() + (player_bet * 1.5))
+            treasury.set_dealer_balance(treasury.get_dealer_balance() - (player_bet * 1.5))
             sleep(3)
             continue
         
@@ -88,9 +89,11 @@ try:
         if winner == "player":
             print(Fore.GREEN + message + Fore.RESET)
             treasury.set_player_balance(treasury.get_player_balance() + player_bet)
+            treasury.set_dealer_balance(treasury.get_dealer_balance() - player_bet)
         elif winner == "dealer":
             print(Fore.RED + message + Fore.RESET)
             treasury.set_player_balance(treasury.get_player_balance() - player_bet)
+            treasury.set_dealer_balance(treasury.get_dealer_balance() + player_bet)
         else:
             print(Fore.YELLOW + message + Fore.RESET)
         
@@ -103,5 +106,6 @@ try:
 except KeyboardInterrupt:
     system('clear') # Clear the "Table" before exiting
     print("\nPlayer has left the game. Final Stats:", f"\nPlayer Wins: {engine._player_wins}", f"\nDealer Wins: {engine._dealer_wins}") # I know it's not a good practice to access the private variables, but I'm just showing you that I can access them (Its python after all, everything is public Xd)
-    print((Fore.GREEN if treasury.get_player_balance() > 100 else Fore.RED) + f"\nPlayer Cashout: £{treasury.get_player_balance()}" + Fore.RESET) # If the player has more than £100, it will be green, otherwise, it will be red.
+    print((Fore.GREEN if treasury.get_player_balance() > 100 else (Fore.YELLOW if treasury.get_player_balance() == 100 else Fore.RED)) + f"\nPlayer Cashout: £{treasury.get_player_balance():,.2f}" + Fore.RESET) # If the player has more than £100, it will be green, otherwise, it will be red.
+    print(Fore.YELLOW + f"Dealer Balance: £{treasury.get_dealer_balance():,.2f}" + Fore.RESET)
     exit(0)
