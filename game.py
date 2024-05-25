@@ -51,9 +51,20 @@ try:
         # Ask the player to bet
         while True:
             try:
-                player_bet = float(input("Enter your bet: £"))
-                if not treasury.can_player_bet(player_bet):
-                    raise ValueError(f"You don't have enough money to bet, you have £{treasury.get_player_balance()}")
+                player_bet = input(
+                    "Enter your bet (minimum £15) to start or type 'exit' to leave the game: "
+                ).lower()
+                if player_bet == 'exit':
+                    raise KeyboardInterrupt()
+                
+                player_bet = float(player_bet)
+                if player_bet < 15:
+                    raise ValueError("Based on the casino's rules, the minimum bet is £15.")
+                elif not treasury.can_player_bet(player_bet):
+                    raise ValueError(
+                        f"You don't have enough money to bet, you have £{treasury.get_player_balance()}"
+                    )
+            
             except ValueError as e:
                 print(Fore.RED + "Error:", e.args[0], Fore.RESET)
                 continue
@@ -62,12 +73,18 @@ try:
 
         # Dispense the cards
         player_cards.extend(dispenser.dispense(2))
-        dealer_cards.extend(['HIDDEN', dispenser.dispense()]) # The dealer's first card is hidden
+        dealer_cards.extend(dispenser.dispense(2))
         
         print_hand(False, player_cards)
-        print_hand(True, dealer_cards) # The dealer's second card is hidden
+        print_hand(True, ['HIDDEN'] + dealer_cards[:1]) # Hide the dealer's first card
 
         if engine.get_the_score(player_cards) == 21: # If the player has a Blackjack
+            # check if the dealer has a Blackjack too
+            if engine.get_the_score(dealer_cards) == 21:
+                print(Fore.YELLOW + "It's a push!" + Fore.RESET)
+                sleep(3)
+                continue
+            
             print(Fore.GREEN + "Whoala! Player wins with a Blackjack!" + Fore.RESET)
             set_balance(True, True)
             sleep(3)
@@ -105,7 +122,9 @@ try:
             print_hand(True, dealer_cards)
             sleep(1)
         
-        while engine.get_the_score(dealer_cards) < 17 and engine.get_the_score(player_cards) <= 21 and not any_lost:
+        while engine.get_the_score(dealer_cards) < 17 \
+            and engine.get_the_score(player_cards) <= 21 \
+            and not any_lost:
             dealer_cards.append(dispenser.dispense())
             print_hand(True, dealer_cards)
             sleep(0.8)
@@ -118,7 +137,8 @@ try:
             
 
         # Check the result
-        winner, message = engine.check_the_result(player_hand=player_cards, dealer_hand=dealer_cards)
+        winner, message = \
+            engine.check_the_result(player_hand=player_cards, dealer_hand=dealer_cards)
 
         if winner == "player":
             print(Fore.GREEN + message + Fore.RESET)
