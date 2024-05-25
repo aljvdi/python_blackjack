@@ -1,8 +1,13 @@
-import models.treasury, models.engine, models.cards
-from colorama import Fore
-from os import system
-from time import sleep
-from pyfiglet import Figlet
+try:
+    import models.treasury, models.engine, models.cards
+    from colorama import Fore
+    from os import system
+    from time import sleep
+    from pyfiglet import Figlet
+except ImportError as e:
+    print("Import Error:", e.args[0])
+    print("Please make sure you have installed the required packages by running 'pip install -r requirements.txt'.")
+    exit(1)
 
 treasury = models.treasury.Treasury(player_balance=100) # the player enters with £100 by default.
 dispenser = models.cards.Cards()
