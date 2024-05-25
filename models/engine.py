@@ -39,15 +39,19 @@ class Engine:
         """
 
         total_score = 0
+        aces = 0
 
         for card in cards:
             if card == 'A':
-                # Ace can be 1 or 11, let's choose intelligently
-                ace_value = 11 if total_score <= 10 else 1
-                total_score += ace_value
+                total_score += 11
+                aces += 1
             else:
-                card_score = self._scores[card]
-                total_score += card_score
+                total_score += self._scores[card]
+
+        # If the total score exceeds 21 and there are Aces, reduce their value to 1
+        while total_score > 21 and aces:
+            total_score -= 10  # 11 (initial Ace value) - 1 (new Ace value) = 10
+            aces -= 1
 
         return total_score
     
