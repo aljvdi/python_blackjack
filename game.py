@@ -20,7 +20,7 @@ def print_hand(is_dealer: bool, the_hand: list) -> None:
 
     print(f"{"Player" if not is_dealer else "Dealer"}'s Hand: ", the_hand)
 
-def set_balance(did_player_win: bool, blackjack: bool = False) -> None:
+def set_balance(did_player_win: bool, blackjack: bool = False, player_bet: float = 0) -> None:
     """
     Set the balance of the player and the dealer
     """
@@ -84,9 +84,9 @@ try:
                 print(Fore.YELLOW + "It's a push!" + Fore.RESET)
                 sleep(3)
                 continue
-            
+
             print(Fore.GREEN + "Whoala! Player wins with a Blackjack!" + Fore.RESET)
-            set_balance(True, True)
+            set_balance(True, True, player_bet)
             sleep(3)
             continue
 
@@ -142,10 +142,10 @@ try:
 
         if winner == "player":
             print(Fore.GREEN + message + Fore.RESET)
-            set_balance(True, False)
+            set_balance(True, False, player_bet)
         elif winner == "dealer":
             print(Fore.RED + message + Fore.RESET)
-            set_balance(False, False)
+            set_balance(False, False, player_bet)
         else:
             print(Fore.YELLOW + message + Fore.RESET)
         
