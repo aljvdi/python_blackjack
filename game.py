@@ -23,6 +23,7 @@ try:
 
         system('clear') # Clear the "Table" for each new game
         print(Fore.CYAN + Figlet(font='slant').renderText("PY BlackJack") + Fore.RESET)
+        print(Fore.CYAN + f"By: gh/@aljvdi | Version: 0.0.1\n" + Fore.RESET) # A little bit of self-promotion Xd
 
         print(Fore.YELLOW + f"Player Balance: £{treasury.get_player_balance():.2f}" + Fore.RESET)
 
