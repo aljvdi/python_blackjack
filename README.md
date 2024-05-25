@@ -12,6 +12,29 @@ If a player's hand value exceeds 21, they lose the round. If the dealer's hand v
 
 You can play multiple rounds of Blackjack until you decide to quit the game.
 
+## Installation
+```bash
+git clone GIT_REPOSITORY_URL python_blackjack
+cd python_blackjack
+
+# install dependencies
+pip install -r requirements.txt
+
+# Either run the game directly
+python game.py
+
+# Or create an alias to run the game
+echo "alias bj='python3 $(pwd)/game.py'" >> ~/.bashrc # if you are using bash
+echo "alias bj='python3 $(pwd)/game.py'" >> ~/.zshrc # if you are using zsh
+echo "alias bj='python3 $(pwd)/game.py'" >> ~/.bash_profile # if you are using macOS
+echo "alias bj='python $(pwd)/game.py'" >> ~/.bash_aliases # if you are using Ubuntu
+
+# Restart the terminal and run the game using the alias
+```
+
+
+
+
 ## How to Play
 
 1. Run the `game.py` file to start the game.
