@@ -36,10 +36,10 @@ try:
 
         # Dispense the cards
         player_cards.extend(dispenser.dispense(2))
-        dealer_cards.extend(dispenser.dispense(2)) # The dealer gets two cards as well (one of them is hidden)
+        dealer_cards.extend(['HIDDEN', dispenser.dispense()]) # The dealer's first card is hidden
         
         print("Player's Hand: ", player_cards)
-        print("Dealer's Hand: ", [dealer_cards[0], 'HIDDEN']) # The dealer's second card is hidden
+        print("Dealer's Hand: ", dealer_cards) # The dealer's second card is hidden
 
         if engine.get_the_score(player_cards) == 21:
             print(Fore.GREEN + "Whoala! Player wins with a Blackjack!" + Fore.RESET)
@@ -47,7 +47,8 @@ try:
             treasury.set_dealer_balance(treasury.get_dealer_balance() - (player_bet * 1.5))
             sleep(3)
             continue
-        
+
+        # Player's turn
         while engine.get_the_score(player_cards) < 21:
             while True:
                 try:
@@ -72,6 +73,12 @@ try:
             elif player_choice == 's':
                 break
 
+        # Dealer's turn
+        if dealer_cards[0] == 'HIDDEN':
+            dealer_cards[0] = dispenser.dispense()
+            print("Dealer's Hand: ", dealer_cards)
+            sleep(1)
+        
         while engine.get_the_score(dealer_cards) < 17 and engine.get_the_score(player_cards) <= 21 and not any_lost:
             dealer_cards.append(dispenser.dispense())
             print("Dealer's Hand: ", dealer_cards)
@@ -81,6 +88,7 @@ try:
             elif engine.get_the_score(dealer_cards) == 21:
                 any_lost = True
                 break
+            
             
 
         # Check the result
