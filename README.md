@@ -14,7 +14,7 @@ You can play multiple rounds of Blackjack until you decide to quit the game.
 
 ## Installation
 ```bash
-git clone GIT_REPOSITORY_URL python_blackjack
+git clone git@github.com:aljvdi/python_blackjack.git python_blackjack
 cd python_blackjack
 
 # install dependencies
