@@ -36,3 +36,9 @@ class Treasury:
     
     def set_player_balance(self, amount: float) -> None:
         self._player_balance = amount
+
+    def get_dealer_balance(self) -> float:
+        return self._dealer_balance
+    
+    def set_dealer_balance(self, amount: float) -> None:
+        self._dealer_balance = amount
