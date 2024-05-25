@@ -13,6 +13,26 @@ treasury = models.treasury.Treasury(player_balance=100) # the player enters with
 dispenser = models.cards.Cards()
 engine = models.engine.Engine()
 
+def print_hand(is_dealer: bool, the_hand: list) -> None:
+    """
+    Print the player's hand
+    """
+
+    print(f"{"Player" if not is_dealer else "Dealer"}'s Hand: ", the_hand)
+
+def set_balance(did_player_win: bool, blackjack: bool = False) -> None:
+    """
+    Set the balance of the player and the dealer
+    """
+
+    player_bet = player_bet * 1.5 if blackjack else player_bet # If the player has a Blackjack, the player will get 1.5 times the bet
+
+    if did_player_win:
+        treasury.set_player_balance(treasury.get_player_balance() + player_bet)
+        treasury.set_dealer_balance(treasury.get_dealer_balance() - player_bet)
+    else:
+        treasury.set_player_balance(treasury.get_player_balance() - player_bet)
+        treasury.set_dealer_balance(treasury.get_dealer_balance() + player_bet)
 
 try:
     while treasury.does_dealer_have_enough_money() and treasury.does_player_have_enough_money():
@@ -44,13 +64,12 @@ try:
         player_cards.extend(dispenser.dispense(2))
         dealer_cards.extend(['HIDDEN', dispenser.dispense()]) # The dealer's first card is hidden
         
-        print("Player's Hand: ", player_cards)
-        print("Dealer's Hand: ", dealer_cards) # The dealer's second card is hidden
+        print_hand(False, player_cards)
+        print_hand(True, dealer_cards) # The dealer's second card is hidden
 
-        if engine.get_the_score(player_cards) == 21:
+        if engine.get_the_score(player_cards) == 21: # If the player has a Blackjack
             print(Fore.GREEN + "Whoala! Player wins with a Blackjack!" + Fore.RESET)
-            treasury.set_player_balance(treasury.get_player_balance() + (player_bet * 1.5))
-            treasury.set_dealer_balance(treasury.get_dealer_balance() - (player_bet * 1.5))
+            set_balance(True, True)
             sleep(3)
             continue
 
@@ -69,10 +88,11 @@ try:
 
             if player_choice == 'h':
                 player_cards.append(dispenser.dispense())
-                print("Player's Hand: ", player_cards)
-                if engine.get_the_score(player_cards) > 21:
+                print_hand(False, player_cards)
+                score = engine.get_the_score(player_cards)
+                if score > 21:
                     break
-                elif engine.get_the_score(player_cards) == 21:
+                elif score == 21:
                     any_lost = True
                     break
                 continue
@@ -82,12 +102,12 @@ try:
         # Dealer's turn
         if dealer_cards[0] == 'HIDDEN':
             dealer_cards[0] = dispenser.dispense()
-            print("Dealer's Hand: ", dealer_cards)
+            print_hand(True, dealer_cards)
             sleep(1)
         
         while engine.get_the_score(dealer_cards) < 17 and engine.get_the_score(player_cards) <= 21 and not any_lost:
             dealer_cards.append(dispenser.dispense())
-            print("Dealer's Hand: ", dealer_cards)
+            print_hand(True, dealer_cards)
             sleep(0.8)
             if engine.get_the_score(dealer_cards) > 21:
                 break
@@ -102,12 +122,10 @@ try:
 
         if winner == "player":
             print(Fore.GREEN + message + Fore.RESET)
-            treasury.set_player_balance(treasury.get_player_balance() + player_bet)
-            treasury.set_dealer_balance(treasury.get_dealer_balance() - player_bet)
+            set_balance(True, False)
         elif winner == "dealer":
             print(Fore.RED + message + Fore.RESET)
-            treasury.set_player_balance(treasury.get_player_balance() - player_bet)
-            treasury.set_dealer_balance(treasury.get_dealer_balance() + player_bet)
+            set_balance(False, False)
         else:
             print(Fore.YELLOW + message + Fore.RESET)
         
